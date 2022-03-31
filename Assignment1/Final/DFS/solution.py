@@ -107,7 +107,7 @@ def setValue(L, r1, r2, c1, c2, value):
             L[r][c] = value
 
 
-def backtrack(nextIndex):
+def DFS(nextIndex):
     global rows, cols, puzzle, locationData, state, count, locationDataFactor, lastCells
 
     if nextIndex > len(locationData)-1:
@@ -135,7 +135,7 @@ def backtrack(nextIndex):
                                 break
 
                         if notCover == False:
-                            if backtrack(nextIndex+1) == True:
+                            if DFS(nextIndex+1) == True:
                                 return True
 
                         setValue(state, eRow-j, eRow+fac-1-j,
@@ -171,7 +171,6 @@ def initialization():
                     if checkValid(state, eRow-j, eRow+fac-1-j, eCol+i-eValue//fac+1, eCol+i):
                         setValue(state, eRow-j, eRow+fac-1-j,
                                  eCol+i-eValue//fac+1, eCol+i, z)
-
     lastCells = [[]for i in range(len(locationData))]
     for row in range(rows):
         for col in range(cols):
@@ -184,13 +183,13 @@ def initialization():
 
 
 if __name__ == "__main__":
-    fileNames = sorted(glob.glob("input/*.txt"))
+    fileNames = sorted(glob.glob("inputTable/*.txt"))
     for fileName in fileNames:
         readPuzzle(fileName)
         print(fileName)
         startTime = time.time()
         initialization()
-        backtrack(0)
+        DFS(0)
         printGrid(state)
         endTime = time.time()
         if verifySolution():
